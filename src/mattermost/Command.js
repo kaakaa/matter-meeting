@@ -5,6 +5,8 @@ export class SlashCommandRoute {
     constructor() {
     }
     chosei(req, res, next) {
+        console.log(req.headers);
+        console.log(req.body);
         res.header("content-type", "application/json");
         res.send(new CommandResponse().toJson());
     }
@@ -21,7 +23,13 @@ export class SlashCommandRoute {
 
 export class CommandResponse {
     constructor() {
-
+        this.query = {
+            "attendee": [],
+            "start_datetime": "",
+            "meeting_time": "", // (min)
+        }; // query summary
+        this.iamgeUrl = ""; // url of grass-graph
+        this.suggestions = []; // suggested meeting datetime
     }
 
     toJson() {
@@ -38,11 +46,9 @@ export class CommandResponse {
                         "integration": {
                             "url": "http://localhost:8080/chosei/requestMeeting",
                             "context": {
-                                "member": ["test1@example.com","test2@example.com"],
-                                "datetime": {
-                                    "start": "2017-12-20T10:00:00",
-                                    "end": "2017-12-20T11:00:00"
-                                }
+                                "attendees": ["test1@example.com","test2@example.com"],
+                                "start_datetime": "2017-12-20T10:00:00",
+                                "meeting_time": 60 * 2
                             }
                         }
                     }]

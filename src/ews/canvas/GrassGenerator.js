@@ -1,0 +1,1 @@
+// TODO: Generator of grass-graph from schedule availability
