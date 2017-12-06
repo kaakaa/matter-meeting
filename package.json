@@ -13,6 +13,7 @@
     "ews-javascript-api": "^0.9.2",
     "ews-javascript-api-auth": "^1.2.1",
     "express": "^4.16.2",
+    "minio": "^3.2.2",
     "nunjucks": "^3.0.1",
     "pn": "^1.0.0",
     "svg2png": "^4.1.1"

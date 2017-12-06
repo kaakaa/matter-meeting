@@ -55,14 +55,17 @@ export function renderGrassSVG(data) {
     });
 };
 
-export function writeGrassSVG(data) {
+export function writeGrassSVG(data, client) {
     const fs = require("pn/fs");
     const svg2png = require("svg2png");
 
     Promise.resolve(renderGrassSVG(data))
         .then(svg2png)
-        .then(buffer => fs.writeFile("dest.png", buffer))
+        // .then(buffer => fs.writeFile("dest.png", buffer))
+        .then(buffer => client.upload("hoge", buffer, "image/png"))
         .catch(e => console.error(e));
 }
 
-writeGrassSVG(sampleData);
+import {MinioClient} from '../../minio/MinioClient';
+var client = new MinioClient()
+writeGrassSVG(sampleData, client);
