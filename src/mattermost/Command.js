@@ -1,14 +1,28 @@
 import 'babel-polyfill';
 import 'isomorphic-fetch';
 
+import {getAvailability, sendMeetingRequest} from '../ews/EwsClient';
+import {writeGrassSVG} from '../ews/misc/GrassGenerator';
+
+
 export class SlashCommandRoute {
     constructor() {
     }
     chosei(req, res, next) {
         console.log(req.headers);
         console.log(req.body);
-        res.header("content-type", "application/json");
-        res.send(new CommandResponse().toJson());
+        const members = ["test@example.com"];
+        Promise.resolve(getAvailability(members))
+            .then(function(availabilities) {
+                const data = {
+                    "total_attendees": members.length,
+                    "availabilities": availabilities
+                };
+                 writeGrassSVG(data);
+                res.header("content-type", "application/json");
+                res.send(new CommandResponse().toJson());
+            })
+            .catch(function(err){ console.error(err) });
     }
     requestMeeting(req, res, next) {
         res.header("content-type", "application/json");

@@ -1,25 +1,26 @@
 // TODO: Generator of grass-graph from schedule availability
 import {renderString} from "nunjucks";
+import {makeBucket, upload} from '../../minio/MinioClient';
 
 const sampleData = {
     "total_attendees": 5,
     "availabilities": [
         {
             "date": "2017/12/5",
-            "attendees": [
-                {"time": "08:00", "attendee": ["test@example.com"]},
-                {"time": "08:30", "attendee": ["test@example.com"]},
-                {"time": "09:00", "attendee": ["test@example.com"]},
-                {"time": "09:30", "attendee": ["test@example.com"]}
+            "schedules": [
+                {"time": "08:00", "quality": 0},
+                {"time": "08:30", "quality": 0},
+                {"time": "09:00", "quality": 0},
+                {"time": "09:30", "quality": 0}
             ]
         },
         {
             "date": "2017/12/6",
-            "attendees": [
-                {"time": "08:00", "attendee": []},
-                {"time": "08:30", "attendee": ["test@example.com"]},
-                {"time": "09:00", "attendee": ["test@example.com"]},
-                {"time": "09:30", "attendee": ["test@example.com"]}
+            "schedules": [
+                {"time": "08:00", "quality": 0},
+                {"time": "08:30", "quality": 0},
+                {"time": "09:00", "quality": 0},
+                {"time": "09:30", "quality": 0}
             ]
         }
     ]
@@ -34,38 +35,35 @@ const grassTemplate = `
 {{ length(elements) / sum }}
 {%- endmacro -%}
 
-<svg width="500" height="110">
+<svg width="1080" height="480">
     {% for availability in data.availabilities -%}
     {% set dateIndex = loop.index0 %}
     <g>
-        <text x=0 y={{ 20 + (15 * dateIndex) }} style="font-size:14px">{{ availability.date }}</text>
-        {%- for attendee in availability.attendees -%}
-        {% set op = opaque(attendee.attendee, data.total_attendees) %}
-        <rect x={{ 100 + (15 * loop.index0) }} y={{ 7 + (15 * dateIndex) }} width="15" height="15" style="fill:rgba(0,255,0,{{ op }});stroke-width:1;stroke:rgb(0,0,0)" />
+        <text x=20 y={{ 20 + (15 * dateIndex) }} style="font-size:14px">{{ availability.date }}</text>
+        {%- for schedule in availability.schedules -%}
+        <rect x={{ 100 + (15 * loop.index0) }} y={{ 7 + (15 * dateIndex) }} width="15" height="15" style="fill:rgba(0,128,0,{{ schedule.quality }});stroke-width:1;stroke:rgb(0,0,0)" />
         {%- endfor %}
     </g>
     {%- endfor %}
+    {% for i in range(0, (24 * 2) + 1, 4) %}
+    <text x={{ 85 + (15 * i) }} y=125 style="font-size:14px">{{ i / 2 }}:00</text>
+    {% endfor %}
 </svg>`;
 
 export function renderGrassSVG(data) {
     return new Promise(function(resolve, reject) {
         let svg = renderString(grassTemplate, {data: data});
-        console.log(svg);
         resolve(svg);
     });
 };
 
-export function writeGrassSVG(data, client) {
+export function writeGrassSVG(data) {
     const fs = require("pn/fs");
     const svg2png = require("svg2png");
 
     Promise.resolve(renderGrassSVG(data))
         .then(svg2png)
         // .then(buffer => fs.writeFile("dest.png", buffer))
-        .then(buffer => client.upload("hoge", buffer, "image/png"))
+        .then(buffer => upload("test", "hoge2", buffer, "image/png"))
         .catch(e => console.error(e));
 }
-
-import {MinioClient} from '../../minio/MinioClient';
-var client = new MinioClient()
-writeGrassSVG(sampleData, client);
