@@ -1,12 +1,13 @@
 import {Client} from "minio";
 
-        let minioClient = new Client({
-            endPoint: 'localhost',
-            port: 9009,
-            secure: false,
-            accessKey: 'access_key',
-            secretKey: 'secret_key'
-        });
+let minioClient = new Client({
+    endPoint: 'localhost',
+    port: 9009,
+    secure: false,
+    accessKey: 'access_key',
+    secretKey: 'secret_key'
+});
+
 export function makeBucket(bucketName, region = 'us-east-1') {
         const client = minioClient;
         client.bucketExists(bucketName, function(err){
@@ -20,7 +21,7 @@ export function makeBucket(bucketName, region = 'us-east-1') {
                 return new Promise();
             }
         });
-    }
+}
 
 makeBucket("test")
 
@@ -29,5 +30,4 @@ export function upload(bucketName, fileName, buffer, type){
             if (err) return console.log(err)
             console.log('File uploaded successfully.')
         });      
-    };
-
+};

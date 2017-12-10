@@ -18,7 +18,7 @@ export class SlashCommandRoute {
                     "total_attendees": members.length,
                     "availabilities": availabilities
                 };
-                 writeGrassSVG(data);
+                writeGrassSVG(data);
                 res.header("content-type", "application/json");
                 res.send(new CommandResponse().toJson());
             })

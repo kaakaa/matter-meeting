@@ -3,14 +3,15 @@ import {ntlmAuthXhrApi} from 'ews-javascript-api-auth';
 import moment from 'moment';
 
 EwsLogging.DebugLogEnabled = false;
-        const username = process.env.EWS_USERNAME;
-        const password = process.env.EWS_PASSWORD;
-        const ignoreCert = true;
-        ConfigurationApi.ConfigureXHR(new ntlmAuthXhrApi(username, password, ignoreCert));
 
-        let exch = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
-        exch.Credentials = new ExchangeCredentials(username, password);
-        exch.Url = new Uri(process.env.EWS_SERVER);
+const username = process.env.EWS_USERNAME;
+const password = process.env.EWS_PASSWORD;
+const ignoreCert = true;
+ConfigurationApi.ConfigureXHR(new ntlmAuthXhrApi(username, password, ignoreCert));
+
+let exch = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
+exch.Credentials = new ExchangeCredentials(username, password);
+exch.Url = new Uri(process.env.EWS_SERVER);
 
 export function getAvailability(attendees, qualityThreshold = 3) {
         let availabilityRequest = new GetUserAvailabilityRequest(exch);
@@ -63,7 +64,8 @@ export function getAvailability(attendees, qualityThreshold = 3) {
         }).catch(function(err){
             throw err
         });
-    }
+}
+
 export function sendMeetingRequest() {
         let appointment = new Appointment(exch);
         appointment.Subject = "test";
@@ -72,5 +74,4 @@ export function sendMeetingRequest() {
         appointment.Start = DateTime.Now;
         appointment.End = DateTime.Now.AddHours(1);
         appointment.Save(SendInvitationsMode.SendOnlyToAll);
- 
-   }
+}
