@@ -1,4 +1,3 @@
-// TODO: Generator of grass-graph from schedule availability
 import {renderString} from "nunjucks";
 import {makeBucket, upload} from '../../minio/MinioClient';
 
@@ -63,7 +62,6 @@ export function writeGrassSVG(data) {
 
     Promise.resolve(renderGrassSVG(data))
         .then(svg2png)
-        // .then(buffer => fs.writeFile("dest.png", buffer))
         .then(buffer => upload("test", "hoge2", buffer, "image/png"))
         .catch(e => console.error(e));
 }

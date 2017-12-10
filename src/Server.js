@@ -3,20 +3,12 @@ import bodyParser from 'body-parser';
 import {EwsClient} from './ews/EwsClient';
 import {SlashCommandRoute} from './mattermost/Command';
 
-// const ewsClient = new EwsClient();
 const slashCommandRoute = new SlashCommandRoute();
 
 function ping(rew, res, next) {
     res.send("pong");
     next();
 }
-
-/*
-function requestMeeting(req, res, next) {
-    ewsClient.sendMeetingRequest();
-    next();
-}
-*/
 
 let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
