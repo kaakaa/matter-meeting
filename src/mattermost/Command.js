@@ -20,8 +20,11 @@ export class SlashCommandRoute {
                     "availabilities": availabilities
                 };
                 writeGrassSVG(id, data);
+		return new CommandResponse(id, attendees, data);
+	    })
+            .then(function(cmdResp){
                 res.header("content-type", "application/json");
-                res.send(new CommandResponse(id, attendees, data).toJson());
+                res.send(cmdResp.toJson());
             })
             .catch(function(err){ console.error(err) });
     }
@@ -38,19 +41,17 @@ export class SlashCommandRoute {
 
 export class CommandResponse {
     constructor(id, attendees, data) {
-        this.query = {
-            "attendee": [],
-            "start_datetime": "",
-            "meeting_time": "", // (min)
-        }; // query summary
+	this.attendees = attendees;
         this.imageUrl = "http://localhost:8080/chosei/grass/" + id; // url of grass-graph
         this.suggestions = data.availabilities.map((availability) => {
             return availability.schedules
                 .filter((schedule) => schedule.quality <= 0)
                 .map((s) => availability.date + " " + s.time);
-        }).map((suggestion) => {
+	}).reduce((x, y) => [...x, ...y])
+        .map((suggestion) => {
+	    console.log(suggestion);
             return {
-                "name": "meeting",
+                "name": suggestion,
                 "integration": {
                     "url": "http://localhost:8080/chosei/requestMeeting",
                     "context": {
@@ -69,7 +70,15 @@ export class CommandResponse {
             "attachments": [
                 {
                     "color": "#88fff00",
-                    "text": this.query,
+                    "text": `
+## matter-meeting Result 
+
+### Attendees
+`
++ this.attendees.map(function(a){ return "* " + a + "\n" }) +
+`
+### Candidates
+`,
                     "image_url": this.imageUrl,
                     "actions": this.suggestions
                 }

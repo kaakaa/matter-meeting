@@ -34,7 +34,7 @@ const grassTemplate = `
 {{ length(elements) / sum }}
 {%- endmacro -%}
 
-<svg width="1080" height="480">
+<svg width="850" height="150">
     {% for availability in data.availabilities -%}
     {% set dateIndex = loop.index0 %}
     <g>

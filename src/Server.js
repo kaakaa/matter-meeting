@@ -21,6 +21,10 @@ server.post("/chosei", slashCommandRoute.chosei)
 server.post("/chosei/requestMeeting", slashCommandRoute.requestMeeting);
 server.get("/chosei/grass/:id", function(req, res, next) {
     read("test", req.params.id, function(err, stream){
+	if(err) {
+		console.log(err);
+		return
+	}
         res.header({'Content-Type': 'image/png'});
         stream.on('data', function(d) { res.send(d); })
     });
