@@ -31,3 +31,7 @@ export function upload(bucketName, fileName, buffer, type){
             console.log('File uploaded successfully.')
         });      
 };
+
+export function read(bucketName, id, cb) {
+    minioClient.getObject(bucketName, id, cb);
+}

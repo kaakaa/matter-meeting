@@ -56,12 +56,12 @@ export function renderGrassSVG(data) {
     });
 };
 
-export function writeGrassSVG(data) {
+export function writeGrassSVG(id, data) {
     const fs = require("pn/fs");
     const svg2png = require("svg2png");
 
     Promise.resolve(renderGrassSVG(data))
         .then(svg2png)
-        .then(buffer => upload("test", "hoge2", buffer, "image/png"))
+        .then(buffer => upload("test", id, buffer, "image/png"))
         .catch(e => console.error(e));
 }

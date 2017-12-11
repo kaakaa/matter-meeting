@@ -3,7 +3,7 @@ import 'isomorphic-fetch';
 
 import {getAvailability, sendMeetingRequest} from '../ews/EwsClient';
 import {writeGrassSVG} from '../ews/misc/GrassGenerator';
-
+import {generate} from 'shortid';
 
 export class SlashCommandRoute {
     constructor() {
@@ -11,16 +11,17 @@ export class SlashCommandRoute {
     chosei(req, res, next) {
         console.log(req.headers);
         console.log(req.body);
-        const members = ["test@example.com"];
-        Promise.resolve(getAvailability(members))
+        const attendees = ["test@example.com"];
+        Promise.resolve(getAvailability(attendees))
             .then(function(availabilities) {
+                const id = generate();
                 const data = {
-                    "total_attendees": members.length,
+                    "total_attendees": attendees.length,
                     "availabilities": availabilities
                 };
-                writeGrassSVG(data);
+                writeGrassSVG(id, data);
                 res.header("content-type", "application/json");
-                res.send(new CommandResponse().toJson());
+                res.send(new CommandResponse(id, attendees, data).toJson());
             })
             .catch(function(err){ console.error(err) });
     }
@@ -36,14 +37,30 @@ export class SlashCommandRoute {
 }
 
 export class CommandResponse {
-    constructor() {
+    constructor(id, attendees, data) {
         this.query = {
             "attendee": [],
             "start_datetime": "",
             "meeting_time": "", // (min)
         }; // query summary
-        this.iamgeUrl = ""; // url of grass-graph
-        this.suggestions = []; // suggested meeting datetime
+        this.imageUrl = "http://localhost:8080/chosei/grass/" + id; // url of grass-graph
+        this.suggestions = data.availabilities.map((availability) => {
+            return availability.schedules
+                .filter((schedule) => schedule.quality <= 0)
+                .map((s) => availability.date + " " + s.time);
+        }).map((suggestion) => {
+            return {
+                "name": "meeting",
+                "integration": {
+                    "url": "http://localhost:8080/chosei/requestMeeting",
+                    "context": {
+                        "attendees": attendees,
+                        "start_datetime": suggestion,
+                        "meeting_time": 60 * 2
+                    }
+                }
+            }
+        });
     }
 
     toJson() {
@@ -52,20 +69,9 @@ export class CommandResponse {
             "attachments": [
                 {
                     "color": "#88fff00",
-                    "text": "${query_summary}",
-                    "image_url": "http://www.mattermost.org/wp-content/uploads/2016/03/logoHorizontal_WS.png",
-                    "actions": [
-                    {
-                        "name": "meeting",
-                        "integration": {
-                            "url": "http://localhost:8080/chosei/requestMeeting",
-                            "context": {
-                                "attendees": ["test1@example.com","test2@example.com"],
-                                "start_datetime": "2017-12-20T10:00:00",
-                                "meeting_time": 60 * 2
-                            }
-                        }
-                    }]
+                    "text": this.query,
+                    "image_url": this.imageUrl,
+                    "actions": this.suggestions
                 }
             ]
         }
