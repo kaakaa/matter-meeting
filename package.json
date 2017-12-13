@@ -1,5 +1,5 @@
 {
-  "name": "mappost",
+  "name": "matter-meeting",
   "version": "0.0.1",
   "description": "appointment management tool as matterpost custome slash command",
   "main": "index.js",
