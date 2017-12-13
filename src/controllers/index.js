@@ -9,6 +9,8 @@ import {writeGrassSVG} from '../ews/misc/GrassGenerator'
 const app = express();
 
 app.set('port', 8080);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.get('/ping', function(req, res) {
     res.send('pong');
