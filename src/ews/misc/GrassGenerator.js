@@ -60,10 +60,8 @@ export async function writeGrassSVG(id, data) {
     const fs = require("pn/fs");
     const svg2png = require("svg2png");
 
-    return new Promise((
-        renderGrassSVG(data))
+    return renderGrassSVG(data)
             .then(svg2png)
             .then(buffer => upload("test", id, buffer, "image/png"))
-            .catch(e => console.error(e))
-        );
+            .catch(e => console.error(e));
 }

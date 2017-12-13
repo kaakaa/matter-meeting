@@ -1,7 +1,7 @@
 export function commandResponse(attendees, choseiId, suggestions) {
     return {
         'response_type': 'in_channel',
-        'attachements': [
+        'attachments': [
             {
                 'color': '#88ff00',
                 'text': '## matter-meeting Result',
@@ -9,10 +9,10 @@ export function commandResponse(attendees, choseiId, suggestions) {
                     {
                         'short': false,
                         'title': 'Attendees',
-                        'value': attendees
+                        'value': attendees.join(" ")
                     },
                 ],
-                'image_url': 'http://localhost:8080/chosei/grass/' + choseiId,
+                'image_url': 'http://10.25.165.168:8080/chosei/grass/' + choseiId,
                 'actions': makeSuggestionTimes(suggestions, attendees)
             }
         ]
@@ -21,7 +21,8 @@ export function commandResponse(attendees, choseiId, suggestions) {
 
 function makeSuggestionTimes(data, attendees) {
     const maxQuality = 0;
-    return data.availabilities
+    const maxResult = 10;
+    const result = data.availabilities
         .map((availability) => {
             return availability.schedules
                 .filter((schedule) => schedule.quality <= maxQuality)
@@ -32,7 +33,7 @@ function makeSuggestionTimes(data, attendees) {
             return {
                 "name": suggestion,
                 "integration": {
-                    "url": "http://localhost:8080/chosei/requestMeeting",
+                    "url": "http://10.25.165.168:8080/chosei/requestMeeting",
                     "context": {
                         "attendees": attendees,
                         "start_datetime": suggestion,
@@ -41,4 +42,10 @@ function makeSuggestionTimes(data, attendees) {
                 }
             }
         });
+
+    if (result.length > maxResult) {
+	return result.slice(0, maxResult);
+    } else {
+        return result;
+    }
 };

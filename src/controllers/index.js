@@ -17,7 +17,7 @@ app.get('/ping', function(req, res) {
 })
 
 app.post('/chosei', function(req, res){
-    const attendees = [req.params.text];
+    const attendees = req.body.text.split(" ", -1);
     getAvailability(attendees).then((availabilities) => {
         const id = generate();
         const data = {
@@ -27,12 +27,12 @@ app.post('/chosei', function(req, res){
         Promise.all(writeGrassSVG(id, data));
         return commandResponse(attendees, id, data);
     }).then((responseText) => {
-        res.header('content-type', 'application/json')
-            .send(responseText)
-            .status(200).end();
+        res.header({'content-type': 'application/json'});
+        res.status(200).send(responseText);
     }).catch((err) => {
+	console.log("fufadufasfjdoidsuafp");
         console.error(err)
-        res.status(500).send(err).end();
+        res.status(500).send(err);
     });
 })
 
@@ -44,8 +44,7 @@ app.get('/chosei/grass/:id', function(req, res) {
 	    }
         res.header({'Content-Type': 'image/png'});
         stream.on('data', function(d) { res.send(d); })
-    }))
-    .then(res.end());
+    }));
 })
 
 app.listen(app.get('port'), (err) => {
