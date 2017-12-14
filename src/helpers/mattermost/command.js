@@ -1,25 +1,30 @@
-export function commandResponse(attendees, choseiId, suggestions) {
+export function commandResponse(targets, attendees, choseiId, suggestions) {
     return {
         'response_type': 'in_channel',
         'attachments': [
             {
                 'color': '#88ff00',
-                'text': '## matter-meeting Result',
+                'text': '## matter-meeting',
                 'fields': [
                     {
-                        'short': false,
+                        'short': true,
                         'title': 'Attendees',
-                        'value': attendees.join(" ")
+                        'value': targets.join(" ")
                     },
+                    {
+                        'short': true,
+                        'title': 'NotAllowed Member',
+                        'value': attendees.join(" ")
+                    }
                 ],
                 'image_url': 'http://10.25.165.168:8080/chosei/grass/' + choseiId,
-                'actions': makeSuggestionTimes(suggestions, attendees)
+                'actions': makeSuggestionTimes(suggestions, targets, attendees)
             }
         ]
     };
 }
 
-function makeSuggestionTimes(data, attendees) {
+function makeSuggestionTimes(data, targets, attendees) {
     const maxQuality = 0;
     const maxResult = 10;
     const result = data.availabilities
@@ -33,9 +38,9 @@ function makeSuggestionTimes(data, attendees) {
             return {
                 "name": suggestion,
                 "integration": {
-                    "url": "http://10.25.165.168:8080/chosei/requestMeeting",
+                    "url": "http://10.25.165.168:8080/chosei/request",
                     "context": {
-                        "attendees": attendees,
+                        "attendees": targets,
                         "start_datetime": suggestion,
                         "meeting_time": 30
                     }

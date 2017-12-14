@@ -1,4 +1,10 @@
 {
+    "ews": {
+      "server": "",
+      "username": "",
+      "password": "",
+      "allowed_domain": ["*example.com"]
+    },
     "minio": {
         "endPoint": "localhost",
         "port": 9009,

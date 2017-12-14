@@ -1,3 +1,4 @@
 lib/
 node_modules/
 minio/data
+default.json

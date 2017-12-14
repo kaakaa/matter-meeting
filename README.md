@@ -1,8 +1,8 @@
 ```
-export EWS_SERVER=https://yyyy.exchange.com/
-export EWS_USERNAME=xxxx
-export EWS_PASSWORD=yyyy
-
 yarn install
-yarn run build && node lib/server.js
+
+cp config/default.json.sample config/default.json
+vi config/default.json
+
+yarn run build && node lib/controllers/index.jss
 ```

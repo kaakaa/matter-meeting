@@ -1,17 +1,19 @@
-import {Appointment, Attendee, AttendeeInfo, AvailabilityOptions, ConfigurationApi, DateTime, ExchangeCredentials, ExchangeService, ExchangeVersion, EwsLogging, GetUserAvailabilityRequest, MeetingAttendeeType, MessageBody, SendInvitationsMode, TimeWindow, Uri} from 'ews-javascript-api';
+import {Appointment, Attendee, AttendeeInfo, AvailabilityOptions, ConfigurationApi, DateTime, DateTimeKind, ExchangeCredentials, ExchangeService, ExchangeVersion, EwsLogging, GetUserAvailabilityRequest, MeetingAttendeeType, MessageBody, SendInvitationsMode, TimeWindow, Uri} from 'ews-javascript-api';
 import {ntlmAuthXhrApi} from 'ews-javascript-api-auth';
 import moment from 'moment';
+import config from 'config';
 
 EwsLogging.DebugLogEnabled = false;
 
-const username = process.env.EWS_USERNAME;
-const password = process.env.EWS_PASSWORD;
+const server = process.env.EWS_SERVER || config.ews.server;
+const username = process.env.EWS_USERNAME || config.ews.username;
+const password = process.env.EWS_PASSWORD || config.ews.password; 
 const ignoreCert = true;
 ConfigurationApi.ConfigureXHR(new ntlmAuthXhrApi(username, password, ignoreCert));
 
 let exch = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
 exch.Credentials = new ExchangeCredentials(username, password);
-exch.Url = new Uri(process.env.EWS_SERVER);
+exch.Url = new Uri(server);
 
 export function getAvailability(attendees, qualityThreshold = 3) {
         let availabilityRequest = new GetUserAvailabilityRequest(exch);
@@ -66,12 +68,16 @@ export function getAvailability(attendees, qualityThreshold = 3) {
         });
 }
 
-export function sendMeetingRequest() {
+export function sendMeetingRequest(attendees, start, time) {
         let appointment = new Appointment(exch);
-        appointment.Subject = "test";
-        appointment.Body = new MessageBody("test appointment");
-        appointment.RequiredAttendees.Add(new Attendee("test", "test@example.com"));
-        appointment.Start = DateTime.Now;
-        appointment.End = DateTime.Now.AddHours(1);
+	attendees.forEach((a) => appointment.RequiredAttendees.Add(new Attendee("", a)));
+
+        appointment.Subject = "matter-meeting";
+        appointment.Body = new MessageBody("This meeting request is from matter-meeting.");
+
+	const startTime = DateTime.Parse(start, DateTimeKind.Local);
+        appointment.Start = startTime;
+        appointment.End = startTime.AddMinutes(time);
+
         appointment.Save(SendInvitationsMode.SendOnlyToAll);
 }
