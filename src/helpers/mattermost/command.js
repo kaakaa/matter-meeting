@@ -4,7 +4,8 @@ export function commandResponse(targets, attendees, choseiId, suggestions) {
         'attachments': [
             {
                 'color': '#88ff00',
-                'text': '## matter-meeting',
+                'pretext': '## matter-meeting',
+		'text': 'http://10.25.165.168:8080/chosei/grass/' + choseiId,
                 'fields': [
                     {
                         'short': true,

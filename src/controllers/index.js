@@ -73,8 +73,9 @@ app.post('/chosei/request', (req, res) => {
 app.get('/chosei/grass/:id', function(req, res) {
     readObject("test", req.params.id)
         .then((stream) => {
-            res.header({'Content-Type': 'image/svg+xml'});
-            stream.on('data', (d) => res.status(200).send(d));
+            res.set('Content-Type', 'image/svg+xml');
+            stream.on('data', (d) => res.write(d));
+            stream.on('end', () => res.end());
         }).catch((err) => console.error(err));
 })
 
