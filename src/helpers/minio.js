@@ -3,6 +3,14 @@ import config from 'config';
 
 const client = new Client(config.minio);
 
-export function readObject(bucket, id, cb) {
-    return client.getObject(bucket, id, cb);
+export function readObject(bucket, id) {
+    return new Promise((resolve, reject) => {
+        client.getObject(bucket, id, (err, stream) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(stream);
+        })
+    });
 }

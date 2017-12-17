@@ -71,14 +71,11 @@ app.post('/chosei/request', (req, res) => {
 });
 
 app.get('/chosei/grass/:id', function(req, res) {
-    Promise.resolve(readObject("test", req.params.id, function(err, stream) {
-    	if(err) {
-            res.status(500).send(err).end();
-		    return;
-	    }
-        res.header({'Content-Type': 'image/png'});
-        stream.on('data', function(d) { res.send(d); })
-    }));
+    readObject("test", req.params.id)
+        .then((stream) => {
+            res.header({'Content-Type': 'image/svg+xml'});
+            stream.on('data', (d) => res.status(200).send(d));
+        }).catch((err) => console.error(err));
 })
 
 app.listen(app.get('port'), (err) => {
