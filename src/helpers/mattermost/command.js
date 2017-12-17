@@ -1,3 +1,9 @@
+import config from 'config';
+
+function makeServerUrl() {
+    return 'http:///' + config.server.host + ':' + config.server.port;
+}
+
 export function commandResponse(targets, attendees, choseiId, suggestions) {
     return {
         'response_type': 'in_channel',
@@ -5,7 +11,7 @@ export function commandResponse(targets, attendees, choseiId, suggestions) {
             {
                 'color': '#88ff00',
                 'pretext': '## matter-meeting',
-		'text': 'http://10.25.165.168:8080/chosei/grass/' + choseiId,
+		'text': makeServerUrl() + '/chosei/grass/' + choseiId,
                 'fields': [
                     {
                         'short': true,
@@ -18,7 +24,7 @@ export function commandResponse(targets, attendees, choseiId, suggestions) {
                         'value': attendees.join(" ")
                     }
                 ],
-                'image_url': 'http://10.25.165.168:8080/chosei/grass/' + choseiId,
+                'image_url': makeServerUrl() + '/chosei/grass/' + choseiId,
                 'actions': makeSuggestionTimes(suggestions, targets, attendees)
             }
         ]
@@ -39,7 +45,7 @@ function makeSuggestionTimes(data, targets, attendees) {
             return {
                 "name": suggestion,
                 "integration": {
-                    "url": "http://10.25.165.168:8080/chosei/request",
+                    "url": makeServerUrl() + "/chosei/request",
                     "context": {
                         "attendees": targets,
                         "start_datetime": suggestion,

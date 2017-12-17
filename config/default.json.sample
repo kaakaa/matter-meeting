@@ -1,15 +1,19 @@
 {
-    "ews": {
-      "server": "",
-      "username": "",
-      "password": "",
-      "allowed_domain": ["*example.com"]
-    },
-    "minio": {
-        "endPoint": "localhost",
-        "port": 9009,
-        "secure": false,
-        "accessKey": "access_key",
-        "secretKey": "secret_key"
-    }
+  "server": {
+    "host": "localhost",
+    "port": 8080
+  },
+  "ews": {
+    "server": "",
+    "username": "",
+    "password": "",
+    "allowed_domain": ["*example.com"]
+  },
+  "minio": {
+      "endPoint": "localhost",
+      "port": 9009,
+      "secure": false,
+      "accessKey": "access_key",
+      "secretKey": "secret_key"
+  }
 }

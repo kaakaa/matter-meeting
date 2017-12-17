@@ -9,7 +9,8 @@ import config from 'config';
 
 const app = express();
 
-app.set('port', 8080);
+app.set('host', config.server.host);
+app.set('port', config.server.port);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -79,7 +80,7 @@ app.get('/chosei/grass/:id', function(req, res) {
         }).catch((err) => console.error(err));
 })
 
-app.listen(app.get('port'), (err) => {
+app.listen(app.get('port'), app.get('host'), (err) => {
     if (err) {
         console.error(err);
     } else {
