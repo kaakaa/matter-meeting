@@ -7,6 +7,7 @@ import {generate} from 'shortid';
 import {writeGrassSVG} from '../ews/misc/GrassGenerator'
 import config from 'config';
 import {EwsUser} from '../models/ews/user';
+import {convertAvailability, interpolate, requestAvailability} from '../helpers/ews/availability';
 
 const app = express();
 
@@ -37,22 +38,25 @@ app.post('/chosei', function(req, res){
     const targets = getAllowedMailAddress(users);
     // TODO: When there is no attendees, return error message.
 
-    getAvailability(targets).then((availabilities) => {
-        const id = generate();
-        const data = {
-            'total_attendees': targets.length,
-            'availabilities': availabilities
-        };
-        Promise.all(writeGrassSVG(config.minio.bucket, id, data));
-        return commandResponse(targets, diffArray(users, targets), id, data);
-    }).then((responseText) => {
-        res.header({'content-type': 'application/json'});
-        res.status(200).send(responseText);
-    }).catch((err) => {
-	console.log("fufadufasfjdoidsuafp");
-        console.error(err)
-        res.status(500).send(err);
-    });
+    requestAvailability(targets)
+	.then(convertAvailability)
+	.then(interpolate)
+	.then((availabilities) => {
+            const id = generate();
+            const data = {
+                'total_attendees': targets.length,
+                'availabilities': availabilities
+            };
+            Promise.all(writeGrassSVG(config.minio.bucket, id, data));
+            return commandResponse(targets, diffArray(users, targets), id, data);
+        }).then((responseText) => {
+            res.header({'content-type': 'application/json'});
+            res.status(200).send(responseText);
+        }).catch((err) => {
+            console.log("fufadufasfjdoidsuafp");
+            console.error(err)
+            res.status(500).send(err);
+        });
 });
 
 app.post('/chosei/request', (req, res) => {
