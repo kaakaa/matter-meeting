@@ -81,7 +81,7 @@ app.get('/chosei/grass/:id', function(req, res) {
 })
 
 // making bucket on minio
-checkBucket(config.minio.bucket.name)
+checkBucket(config.minio.bucket)
     .then(makeBucket)
     .then((err) => {if (err) console.error(err)})
     .catch((err) => console.log(err));
