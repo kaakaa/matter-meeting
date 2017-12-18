@@ -14,6 +14,7 @@
       "port": 9009,
       "secure": false,
       "accessKey": "access_key",
-      "secretKey": "secret_key"
+      "secretKey": "secret_key",
+      "bucket": "name": "matter-meeting"
   }
 }

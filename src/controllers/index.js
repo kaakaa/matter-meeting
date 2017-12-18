@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {readObject} from '../helpers/minio'
+import {readObject, checkBucket, makeBucket} from '../helpers/minio'
 import {commandResponse} from '../helpers/mattermost/command'
 import {getAvailability, sendMeetingRequest} from '../ews/EwsClient'
 import {generate} from 'shortid';
@@ -79,6 +79,12 @@ app.get('/chosei/grass/:id', function(req, res) {
             stream.on('end', () => res.end());
         }).catch((err) => console.error(err));
 })
+
+// making bucket on minio
+checkBucket(config.minio.bucket.name)
+    .then(makeBucket)
+    .then((err) => {if (err) console.error(err)})
+    .catch((err) => console.log(err));
 
 app.listen(app.get('port'), app.get('host'), (err) => {
     if (err) {
