@@ -1,5 +1,5 @@
 import {renderString} from "nunjucks";
-import {upload} from '../../helpers/minio';
+import {uploadObject} from '../../helpers/minio';
 
 const sampleData = {
     "total_attendees": 5,

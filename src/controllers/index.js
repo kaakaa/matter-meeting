@@ -72,7 +72,7 @@ app.post('/chosei/request', (req, res) => {
 });
 
 app.get('/chosei/grass/:id', function(req, res) {
-    readObject("test", req.params.id)
+    readObject(config.minio.bucket, req.params.id)
         .then((stream) => {
             res.set('Content-Type', 'image/svg+xml');
             stream.on('data', (d) => res.write(d));
