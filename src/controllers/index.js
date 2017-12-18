@@ -2,9 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {readObject, checkBucket, makeBucket} from '../helpers/minio'
 import {commandResponse} from '../helpers/mattermost/command'
-import {getAvailability, sendMeetingRequest} from '../ews/EwsClient'
+import {sendMeetingRequest} from '../helpers/ews/meeting'
 import {generate} from 'shortid';
-import {writeGrassSVG} from '../ews/misc/GrassGenerator'
+import {writeGrassSVG} from '../helpers/grass'
 import config from 'config';
 import {EwsUser} from '../models/ews/user';
 import {convertAvailability, interpolate, requestAvailability} from '../helpers/ews/availability';
@@ -42,13 +42,16 @@ app.post('/chosei', function(req, res){
 	.then(convertAvailability)
 	.then(interpolate)
 	.then((availabilities) => {
-            const id = generate();
-            const data = {
+            return {
+                'id': generate(),
                 'total_attendees': targets.length,
                 'availabilities': availabilities
-            };
-            Promise.all(writeGrassSVG(config.minio.bucket, id, data));
-            return commandResponse(targets, diffArray(users, targets), id, data);
+            }
+        }).then((data) => {
+	    writeGrassSVG(config.minio.bucket, data);
+	    return data;
+        }).then((data) => {
+            return commandResponse(targets, diffArray(users, targets), data);
         }).then((responseText) => {
             res.header({'content-type': 'application/json'});
             res.status(200).send(responseText);

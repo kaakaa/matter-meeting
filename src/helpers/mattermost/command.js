@@ -4,14 +4,14 @@ function makeServerUrl() {
     return 'http:///' + config.server.host + ':' + config.server.port;
 }
 
-export function commandResponse(targets, attendees, choseiId, suggestions) {
+export function commandResponse(targets, attendees, suggestions) {
     return {
         'response_type': 'in_channel',
         'attachments': [
             {
                 'color': '#88ff00',
                 'pretext': '## matter-meeting',
-		'text': makeServerUrl() + '/chosei/grass/' + choseiId,
+		'text': makeServerUrl() + '/chosei/grass/' + suggestions.id,
                 'fields': [
                     {
                         'short': true,
@@ -24,7 +24,7 @@ export function commandResponse(targets, attendees, choseiId, suggestions) {
                         'value': attendees.map((a) => a.email).join(" ")
                     }
                 ],
-                'image_url': makeServerUrl() + '/chosei/grass/' + choseiId,
+                'image_url': makeServerUrl() + '/chosei/grass/' + suggestions.id,
                 'actions': makeSuggestionTimes(suggestions, targets, attendees)
             }
         ]

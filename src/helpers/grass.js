@@ -1,29 +1,5 @@
-import {renderString} from "nunjucks";
-import {uploadObject} from '../../helpers/minio';
-
-const sampleData = {
-    "total_attendees": 5,
-    "availabilities": [
-        {
-            "date": "2017/12/5",
-            "schedules": [
-                {"time": "08:00", "quality": 0},
-                {"time": "08:30", "quality": 0},
-                {"time": "09:00", "quality": 0},
-                {"time": "09:30", "quality": 0}
-            ]
-        },
-        {
-            "date": "2017/12/6",
-            "schedules": [
-                {"time": "08:00", "quality": 0},
-                {"time": "08:30", "quality": 0},
-                {"time": "09:00", "quality": 0},
-                {"time": "09:30", "quality": 0}
-            ]
-        }
-    ]
-};
+import {renderString} from 'nunjucks';
+import {uploadObject} from './minio';
 
 const grassTemplate = `
 {%- macro length(elements) -%}
@@ -58,11 +34,9 @@ export function renderGrassSVG(data) {
     });
 };
 
-export async function writeGrassSVG(bucket, id, data) {
-    const fs = require("pn/fs");
-
+export function writeGrassSVG(bucket, data) {
     return renderGrassSVG(data)
 	    .then((d) => Buffer.from(d, 'utf-8'))
-            .then(buffer => uploadObject(bucket, id, buffer, "image/png"))
+            .then(buffer => uploadObject(bucket, data.id, buffer, "image/png"))
             .catch(e => console.error(e));
 }
