@@ -16,12 +16,12 @@ export function commandResponse(targets, attendees, choseiId, suggestions) {
                     {
                         'short': true,
                         'title': 'Attendees',
-                        'value': targets.join(" ")
+                        'value': targets.map((t) => t.email).join(" ")
                     },
                     {
                         'short': true,
                         'title': 'NotAllowed Member',
-                        'value': attendees.join(" ")
+                        'value': attendees.map((a) => a.email).join(" ")
                     }
                 ],
                 'image_url': makeServerUrl() + '/chosei/grass/' + choseiId,
@@ -47,7 +47,7 @@ function makeSuggestionTimes(data, targets, attendees) {
                 "integration": {
                     "url": makeServerUrl() + "/chosei/request",
                     "context": {
-                        "attendees": targets,
+                        "attendees": targets.map((t) => t.email),
                         "start_datetime": suggestion,
                         "meeting_time": 30
                     }

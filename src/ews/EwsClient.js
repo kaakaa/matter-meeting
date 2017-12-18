@@ -17,7 +17,7 @@ exch.Url = new Uri(server);
 
 export function getAvailability(attendees, qualityThreshold = 3) {
         let availabilityRequest = new GetUserAvailabilityRequest(exch);
-        availabilityRequest.Attendees = attendees.map((attendee) => new AttendeeInfo(attendee, MeetingAttendeeType.Required));
+        availabilityRequest.Attendees = attendees.map((attendee) => new AttendeeInfo(attendee.email, MeetingAttendeeType.Required));
         availabilityRequest.TimeWindow = new TimeWindow(DateTime.Now, DateTime.Now.AddDays(7));
         availabilityRequest.Options = new AvailabilityOptions();
 

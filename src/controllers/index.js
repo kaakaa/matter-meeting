@@ -6,6 +6,7 @@ import {getAvailability, sendMeetingRequest} from '../ews/EwsClient'
 import {generate} from 'shortid';
 import {writeGrassSVG} from '../ews/misc/GrassGenerator'
 import config from 'config';
+import {EwsUser} from '../models/ews/user';
 
 const app = express();
 
@@ -18,9 +19,9 @@ app.get('/ping', function(req, res) {
     res.send('pong');
 })
 
-function getAllowedMailAddress(attendees) {
-    return attendees.filter((attendee) => {
-        return config.ews.allowed_domain.some((d) => new RegExp(d).test(attendee) );
+function getAllowedMailAddress(users) {
+    return users.filter((u) => {
+        return config.ews.allowed_domain.some((d) => new RegExp(d).test(u.email));
     });
 }
 
@@ -28,9 +29,14 @@ function diffArray(origin, after) {
     return origin.filter((o) => after.indexOf(o) < 0 );
 };
 
+/**
+ * Schedule Chosei
+ */
 app.post('/chosei', function(req, res){
-    const attendees = req.body.text.split(" ", -1);
-    const targets = getAllowedMailAddress(attendees);
+    const users = req.body.text.split(" ", -1).map((s) => new EwsUser("", s));
+    const targets = getAllowedMailAddress(users);
+    // TODO: When there is no attendees, return error message.
+
     getAvailability(targets).then((availabilities) => {
         const id = generate();
         const data = {
@@ -38,7 +44,7 @@ app.post('/chosei', function(req, res){
             'availabilities': availabilities
         };
         Promise.all(writeGrassSVG(config.minio.bucket, id, data));
-        return commandResponse(targets, diffArray(attendees, targets), id, data);
+        return commandResponse(targets, diffArray(users, targets), id, data);
     }).then((responseText) => {
         res.header({'content-type': 'application/json'});
         res.status(200).send(responseText);
@@ -71,16 +77,21 @@ app.post('/chosei/request', (req, res) => {
 	}
 });
 
+/**
+ * Read grass graph from Minio
+ */
 app.get('/chosei/grass/:id', function(req, res) {
     readObject(config.minio.bucket, req.params.id)
         .then((stream) => {
             res.set('Content-Type', 'image/svg+xml');
             stream.on('data', (d) => res.write(d));
             stream.on('end', () => res.end());
-        }).catch((err) => console.error(err));
+        }).catch((err) => console.log(err.code + ': ' + err.resource));
 })
 
-// making bucket on minio
+/**
+ *  Making bucket on Minio if not exists.
+ */
 checkBucket(config.minio.bucket)
     .then(makeBucket)
     .then((err) => {if (err) console.error(err)})

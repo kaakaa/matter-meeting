@@ -39,13 +39,5 @@ export function uploadObject(bucket, file, buffer, type) {
 };
 
 export function readObject(bucket, id) {
-    return new Promise((resolve, reject) => {
-        client.getObject(bucket, id, (err, stream) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(stream);
-        })
-    });
+    return client.getObject(bucket, id);
 }
