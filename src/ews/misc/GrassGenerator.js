@@ -58,11 +58,11 @@ export function renderGrassSVG(data) {
     });
 };
 
-export async function writeGrassSVG(id, data) {
+export async function writeGrassSVG(bucket, id, data) {
     const fs = require("pn/fs");
 
     return renderGrassSVG(data)
 	    .then((d) => Buffer.from(d, 'utf-8'))
-            .then(buffer => upload("test", id, buffer, "image/png"))
+            .then(buffer => uploadObject(bucket, id, buffer, "image/png"))
             .catch(e => console.error(e));
 }

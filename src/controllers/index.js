@@ -37,7 +37,7 @@ app.post('/chosei', function(req, res){
             'total_attendees': targets.length,
             'availabilities': availabilities
         };
-        Promise.all(writeGrassSVG(id, data));
+        Promise.all(writeGrassSVG(config.minio.bucket, id, data));
         return commandResponse(targets, diffArray(attendees, targets), id, data);
     }).then((responseText) => {
         res.header({'content-type': 'application/json'});
