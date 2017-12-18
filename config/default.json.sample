@@ -15,6 +15,6 @@
       "secure": false,
       "accessKey": "access_key",
       "secretKey": "secret_key",
-      "bucket": "name": "matter-meeting"
+      "bucket": "matter-meeting"
   }
 }
