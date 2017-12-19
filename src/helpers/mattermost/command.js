@@ -16,12 +16,12 @@ export function commandResponse(targets, attendees, suggestions) {
                     {
                         'short': true,
                         'title': 'Attendees',
-                        'value': targets.map((t) => t.email).join(" ")
+                        'value': targets.map((t) => t.email).join("\n")
                     },
                     {
                         'short': true,
-                        'title': 'NotAllowed Member',
-                        'value': attendees.map((a) => a.email).join(" ")
+                        'title': "Not Allowed (don't send meeting req)",
+                        'value': attendees.map((a) => a.email).join("\n")
                     }
                 ],
                 'image_url': makeServerUrl() + '/chosei/grass/' + suggestions.id,
