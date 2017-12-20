@@ -2,15 +2,15 @@
 
 Mattermost integration for adjusting schedules and making appointments on Exchange server.
 
+matter-meeting needs Mattermost v4.2 and higher.
+
 ## Run
 
 ```
-yarn install
-
 cp config/default.json.sample config/default.json
 vi config/default.json
 
-yarn run build && node lib/controllers/index.js
+docker-compose up -d
 ```
 
 ## Configure
