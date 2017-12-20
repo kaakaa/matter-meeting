@@ -1,7 +1,7 @@
 import config from 'config';
 
 function makeServerUrl() {
-    return 'http:///' + config.server.host + ':' + config.server.port;
+    return 'http://' + config.server.host + ':' + config.server.port;
 }
 
 export function commandResponse(targets, attendees, suggestions) {
