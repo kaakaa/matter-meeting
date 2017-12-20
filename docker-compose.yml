@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  app:
+    build:
+      context: .
+      args:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+    ports:
+    - "8080:8080"
+    volumes:
+    - ./config/default.json:/usr/local/src/config/default.json
   minio:
     image: minio/minio:latest
     command: server /export
@@ -8,12 +18,7 @@ services:
     - MINIO_ACCESS_KEY=access_key
     - MINIO_SECRET_KEY=secret_key
     ports:
-    - "9009:9000"
+    - "9000:9000"
     volumes:
     - ./minio/data/export:/export
     - ./minio/data/.minio:/root/.minio
-    networks:
-    - db
-
-networks:
-  db:

@@ -11,7 +11,6 @@ import {convertAvailability, interpolate, requestAvailability} from '../helpers/
 
 const app = express();
 
-app.set('host', config.server.host);
 app.set('port', config.server.port);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -104,7 +103,7 @@ checkBucket(config.minio.bucket)
     .then((err) => {if (err) console.error(err)})
     .catch((err) => console.log(err));
 
-app.listen(app.get('port'), app.get('host'), (err) => {
+app.listen(app.get('port'), (err) => {
     if (err) {
         console.error(err);
     } else {
