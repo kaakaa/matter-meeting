@@ -11,7 +11,7 @@
   },
   "minio": {
       "endPoint": "localhost",
-      "port": 9009,
+      "port": 9000,
       "secure": false,
       "accessKey": "access_key",
       "secretKey": "secret_key",
