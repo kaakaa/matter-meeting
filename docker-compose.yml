@@ -11,6 +11,13 @@ services:
     - "8080:8080"
     volumes:
     - ./config/default.json:/usr/local/src/config/default.json
+    entrypoint:
+    - "/usr/local/src/wait-for.sh"
+    - "minio"
+    - "9000"
+    command:
+    - "node"
+    - "lib/controllers/index.js"
   minio:
     image: minio/minio:latest
     command: server /export

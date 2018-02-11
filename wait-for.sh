@@ -13,4 +13,5 @@ until nc -w 1 $host -z $port ; do
   sleep 1
 done
 
+echo "minio is available - running"
 exec $cmd

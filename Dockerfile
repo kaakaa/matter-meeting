@@ -4,9 +4,9 @@ WORKDIR /usr/local/src
 ADD . /usr/local/src
 
 RUN apt-get update \
-  && apt-get install -y git \
+  && apt-get install -y git netcat \
   && yarn --proxy ${http_proxy} --https-proxy ${https_proxy} install \
   && yarn run build
 
-ENTRYPOINT ["/usr/local/src/wait-for.sh", "minio", "9000"]
-CMD ["node", "lib/controllers/index.js"]
+ENTRYPOINT ["node"]
+CMD ["lib/controllers/index.js"]
