@@ -1,5 +1,4 @@
 #!/bin/bash
-# wait-for.sh
 
 set -e
 
@@ -10,8 +9,8 @@ shift
 cmd="$@"
 
 until nc -w 1 $host -z $port ; do
+  >&2 echo "minio is unavailable - sleeping"
   sleep 1
 done
 
-echo "OK"
 exec $cmd

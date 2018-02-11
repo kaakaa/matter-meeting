@@ -8,5 +8,5 @@ RUN apt-get update \
   && yarn --proxy ${http_proxy} --https-proxy ${https_proxy} install \
   && yarn run build
 
-ENTRYPOINT ["node"]
-CMD ["lib/controllers/index.js"]
+ENTRYPOINT ["/usr/local/src/wait-for.sh", "minio", "9000"]
+CMD ["node", "lib/controllers/index.js"]

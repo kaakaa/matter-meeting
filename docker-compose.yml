@@ -7,7 +7,6 @@ services:
       args:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
-    command: ["/usr/src/local/wait-for.sh", "minio", "9000", "node", "lib/controllers/index.js"]
     ports:
     - "8080:8080"
     volumes:
