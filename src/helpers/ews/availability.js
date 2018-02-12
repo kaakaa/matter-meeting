@@ -47,9 +47,10 @@ export function interpolateSchedule(dateItem) {
     const defined = dateItem.schedules.map((s) => s.time);
     const newData = [];
 
+    const filterTimes = (s) => s.time === dummyTime.format('HH:mm');
     while (dummyTime.isBefore(dummyEnd)) {
         if (defined.includes(dummyTime.format('HH:mm'))) {
-            const d = dateItem.schedules.filter((s) => s.time === dummyTime.format('HH:mm'));
+            const d = dateItem.schedules.filter(filterTimes);
             newData.push(d[0]);
         } else {
             // If there is no data, make dummy data and push it.
