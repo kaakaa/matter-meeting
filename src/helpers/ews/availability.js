@@ -1,13 +1,30 @@
 import {ExchangeClient} from './service';
-import {AttendeeInfo, AvailabilityOptions, DateTime, GetUserAvailabilityRequest, MeetingAttendeeType, TimeWindow} from 'ews-javascript-api';
+import {AttendeeInfo, AvailabilityOptions, DateTime, GetUserAvailabilityRequest, MeetingAttendeeType, TimeWindow, SuggestionQuality} from 'ews-javascript-api';
 import moment from 'moment';
 
-export function requestAvailability(users, qualityThreshold = 3) {
+export function requestAvailability(users, qualityThreshold = 2) {
     const request = new GetUserAvailabilityRequest(ExchangeClient);
     request.Attendees = users.map((u) => new AttendeeInfo(u.email, MeetingAttendeeType.Required));
     request.TimeWindow = new TimeWindow(DateTime.Now, DateTime.Now.AddDays(7)); // eslint-disable-line new-cap
-    request.Options = new AvailabilityOptions();
+
+    const availabilityOptions = new AvailabilityOptions();
+    availabilityOptions.MinimumSuggestionQuality = convertIntToSuggestionQuality(qualityThreshold);
+    request.Options = availabilityOptions;
+
     return request.Execute(); // eslint-disable-line new-cap
+}
+
+function convertIntToSuggestionQuality(i) {
+    switch (i) {
+    case 0:
+        return SuggestionQuality.Excellent;
+    case 1:
+        return SuggestionQuality.Good;
+    case 2:
+        return SuggestionQuality.Fair;
+    default:
+        return SuggestionQuality.Poor;
+    }
 }
 
 export function convertAvailability(availabilityResult) {
