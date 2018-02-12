@@ -27,16 +27,17 @@ const grassTemplate = `
     {% endfor %}
 </svg>`;
 
-export function renderGrassSVG(data) {
-    return new Promise(function(resolve, reject) {
-        let svg = renderString(grassTemplate, {data: data});
+export function renderGrassSVG(d) {
+    return new Promise((resolve) => {
+        const data = {data: d};
+        const svg = renderString(grassTemplate, data);
         resolve(svg);
     });
-};
+}
 
 export function writeGrassSVG(bucket, data) {
     return renderGrassSVG(data)
-	    .then((d) => Buffer.from(d, 'utf-8'))
-            .then(buffer => uploadObject(bucket, data.id, buffer, "image/png"))
-            .catch(e => console.error(e));
+        .then((d) => Buffer.from(d, 'utf-8'))
+        .then((buffer) => uploadObject(bucket, data.id, buffer, 'image/png'))
+        .catch((e) => console.error(e)); // eslint-disable-line no-console
 }
