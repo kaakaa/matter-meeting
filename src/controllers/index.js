@@ -87,12 +87,14 @@ app.post('/chosei/request', (req, res) => {
  * Read grass graph from Minio
  */
 app.get('/chosei/grass/:id', (req, res) => {
+    const resolve = (stream) => {
+        res.set('Content-Type', 'image/svg+xml');
+        stream.on('data', (d) => res.write(d));
+        stream.on('end', () => res.end());
+    };
     readObject(config.minio.bucket, req.params.id)
-        .then((stream) => {
-            res.set('Content-Type', 'image/svg+xml');
-            stream.on('data', (d) => res.write(d));
-            stream.on('end', () => res.end());
-        }).catch((err) => console.log(err.code + ': ' + err.resource)); // eslint-disable-line no-console
+        .then(resolve)
+        .catch((err) => console.log(err.code + ': ' + err.resource)); // eslint-disable-line no-console
 });
 
 /**
