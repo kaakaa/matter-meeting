@@ -44,7 +44,7 @@ app.post('/chosei', (req, res) => {
             return {
                 id: generate(),
                 total_attendees: targets.length,
-                availabilities: availabilities
+                availabilities
             };
         }).then((data) => {
             writeGrassSVG(config.minio.bucket, data);
