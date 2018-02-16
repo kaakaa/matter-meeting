@@ -11,6 +11,8 @@ services:
     - "8080:8080"
     volumes:
     - ./config/default.json:/usr/local/src/config/default.json
+    environment:
+    - TZ=Asia/Tokyo
     entrypoint:
     - "/usr/local/src/wait-for.sh"
     - "minio"
