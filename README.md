@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kaakaa/matter-meeting.svg?branch=master)](https://travis-ci.org/kaakaa/matter-meeting)
+
 # matter-meeting
 
 Mattermost integration for adjusting schedules and making appointments on Exchange server.
