@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kaakaa/matter-meeting.svg?branch=master)](https://travis-ci.org/kaakaa/matter-meeting)
+[![codecov](https://codecov.io/gh/kaakaa/matter-meeting/branch/master/graph/badge.svg)](https://codecov.io/gh/kaakaa/matter-meeting)
 
 # matter-meeting
 
