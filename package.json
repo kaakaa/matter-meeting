@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src -d lib",
-    "check": "eslint --ignore-pattern node_modules --ignore-pattern lib --quiet ."
+    "test": "babel src -d lib && mocha test/**/*.test.js",
+    "check": "eslint --ignore-pattern node_modules --ignore-pattern lib  --ignore-pattern test --quiet ."
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -27,7 +28,10 @@
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.1.2",
     "eslint-plugin-babel": "^4.1.2",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "mocha": "^5.0.1",
+    "sinon": "^4.3.0"
   }
 }
