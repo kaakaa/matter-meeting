@@ -1,0 +1,20 @@
+{
+  "server": {
+    "host": "testserver",
+    "port": 8080
+  },
+  "ews": {
+    "server": "https://ews.test.server.com/ews.asmx",
+    "username": "ews_user",
+    "password": "password",
+    "allowed_domain": ["*example.com"]
+  },
+  "minio": {
+      "endPoint": "minioserver",
+      "port": 9000,
+      "secure": false,
+      "accessKey": "access_key",
+      "secretKey": "secret_key",
+      "bucket": "matter-meeting"
+  }
+}

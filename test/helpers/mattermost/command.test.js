@@ -58,7 +58,7 @@ describe('Mattermost command response', () => {
                 {
                     color: '#88ff00',
                     pretext: '## matter-meeting',
-                    text: 'http://localhost:8080/chosei/grass/test_id',
+                    text: 'http://testserver:8080/chosei/grass/test_id',
                     fields: [
                         {
                             short: true,
@@ -71,12 +71,12 @@ describe('Mattermost command response', () => {
                             value: 'not@allowed.com'
                         }
                     ],
-                    image_url: 'http://localhost:8080/chosei/grass/test_id',
+                    image_url: 'http://testserver:8080/chosei/grass/test_id',
                     actions: [
                         {
                             name: '2018-01-01 00:00',
                             integration: {
-                                url: 'http://localhost:8080/chosei/request',
+                                url: 'http://testserver:8080/chosei/request',
                                 context: {
                                     attendees: ['test1@example.com','test2@example.com'],
                                     start_datetime: '2018-01-01 00:00',
@@ -87,7 +87,7 @@ describe('Mattermost command response', () => {
                         {
                             name: '2018-01-02 12:00',
                             integration: {
-                                url: 'http://localhost:8080/chosei/request',
+                                url: 'http://testserver:8080/chosei/request',
                                 context: {
                                     attendees: ['test1@example.com','test2@example.com'],
                                     start_datetime: '2018-01-02 12:00',
