@@ -1,5 +1,4 @@
 const assert = require('chai').assert;
-const sinon = require('sinon');
 
 const grass = require('../../lib/helpers/grass');
 

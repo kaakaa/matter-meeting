@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src -d lib",
-    "test": "babel src -d lib && mocha test/**/*.test.js",
+    "test": "babel src -d lib && mocha --recursive",
     "check": "eslint --ignore-pattern node_modules --ignore-pattern lib  --ignore-pattern test --quiet ."
   },
   "dependencies": {
