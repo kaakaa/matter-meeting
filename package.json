@@ -8,6 +8,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "test": "babel src -d lib && mocha --recursive",
+    "coverage": "babel src -d lib && nyc mocha --recursive && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "check": "eslint --ignore-pattern node_modules --ignore-pattern lib  --ignore-pattern test --quiet ."
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "eslint-plugin-babel": "^4.1.2",
     "isomorphic-fetch": "^2.2.1",
     "mocha": "^5.0.1",
+    "nyc": "^11.4.1",
     "sinon": "^4.3.0"
   }
 }
